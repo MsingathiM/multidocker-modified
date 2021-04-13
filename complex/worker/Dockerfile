@@ -1,0 +1,16 @@
+FROM node:14.14.0-alpine
+
+WORKDIR '/app'
+
+COPY . /certs/* /etc/ssl/certs/
+
+ENV SSL_CERT_DIR=/etc/ssl/certs/
+RUN apk add --update --no-cache openssl ca-certificates && \
+    update-ca-certificates
+
+COPY package.json .
+RUN npm install -g npm@7.8.0
+
+COPY . .
+
+CMD ["npm", "run", "start"]
